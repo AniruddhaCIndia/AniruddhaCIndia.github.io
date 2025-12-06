@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Aniruddha Chakraborty</title>
+  <title>Your Name – Visual Experiments</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -12,27 +12,98 @@
   <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Hi, I'm Aniruddha.</h1>
-    <p>Currently exploring gravitational lensing</p>
-  </header>
+  <div class="layout">
+    <!-- Left sidebar with tabs -->
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>Your Name</h1>
+        <p>Interactive plots & visual experiments</p>
+      </div>
 
-  <main>
-    <section id="plot-section">
-      <h2>Interactive Plot</h2>
-      <div id="plot"></div>
-    </section>
+      <nav class="tabs">
+        <a href="#plot1-section" class="tab">First Plot</a>
+        <a href="#plot2-section" class="tab">Second Plot</a>
+        <a href="#links-section" class="tab">Links</a>
+        <a href="#about-section" class="tab">About</a>
+      </nav>
 
-    <section id="gif-section">
-      <h2>Cool GIF</h2>
-      <p>This could be a simulation, animation, or anything you like.</p>
-      <img src="assets/img/my-animation.gif" alt="My animation" class="gif" />
-    </section>
-  </main>
+      <div class="sidebar-footer">
+        <p>© <span id="year"></span></p>
+      </div>
+    </aside>
 
-  <footer>
-    <p>© <span id="year"></span> Your Name</p>
-  </footer>
+    <!-- Main content on the right -->
+    <main class="content">
+      <section id="plot1-section" class="card">
+        <h2>First Interactive Plot</h2>
+        <p class="section-intro">
+          A simple line chart to test interactions. Try hovering, zooming, and panning.
+        </p>
+        <div id="plot1" class="plot"></div>
+
+        <p class="inline-link">
+          Want to compare categories? <a href="#plot2-section">Jump to the second plot ↓</a>
+        </p>
+      </section>
+
+      <section id="plot2-section" class="card">
+        <h2>Second Interactive Plot</h2>
+        <p class="section-intro">
+          A pie chart example. You can click segments to isolate them.
+        </p>
+        <div id="plot2" class="plot"></div>
+      </section>
+
+      <section id="links-section" class="card">
+        <h2>Links & Shortcuts</h2>
+        <p class="section-intro">
+          Quick navigation inside this page and a few external links.
+        </p>
+
+        <ul class="links-list">
+          <!-- Internal links -->
+          <li>
+            🔗 <a href="#plot1-section">Go to First Plot</a>
+          </li>
+          <li>
+            🔗 <a href="#plot2-section">Go to Second Plot</a>
+          </li>
+          <li>
+            🔗 <a href="#about-section">Read more About Me</a>
+          </li>
+
+          <!-- External links – replace with your actual URLs -->
+          <li>
+            🌐 <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer">
+              My GitHub Profile
+            </a>
+          </li>
+          <li>
+            💼 <a href="https://www.linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer">
+              My LinkedIn
+            </a>
+          </li>
+          <li>
+            ✉️ <a href="mailto:youremail@example.com">
+              Email Me
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <section id="about-section" class="card">
+        <h2>About Me</h2>
+        <p>
+          I’m a data/visual enthusiast experimenting with plots, animations, and interactive graphics on the web.
+          This page is a playground where I try out new ideas, datasets, and visual styles.
+        </p>
+        <p>
+          Over time, I plan to add more tabs, each focusing on a specific topic—like time series, simulations,
+          and generative visuals.
+        </p>
+      </section>
+    </main>
+  </div>
 
   <script src="assets/js/main.js"></script>
 </body>
