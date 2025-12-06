@@ -1,51 +1,169 @@
+/* Global reset-ish */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   margin: 0;
   padding: 0;
-  background: #050816;
+  background: #020617;
   color: #e5e7eb;
 }
 
-header {
-  text-align: center;
-  padding: 2rem 1rem;
-  background: radial-gradient(circle at top, #1d4ed8, #020617 60%);
+/* Overall layout: sidebar + content */
+.layout {
+  display: flex;
+  min-height: 100vh;
 }
 
-h1 {
+/* Sidebar (left tabs area) */
+.sidebar {
+  width: 260px;
+  padding: 1.5rem 1.25rem;
+  background: radial-gradient(circle at top, #1d4ed8, #020617 65%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid #111827;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  min-height: 100vh;
+}
+
+.brand h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.4rem;
+}
+
+.brand p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #cbd5f5;
+}
+
+.tabs {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tab {
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid #1f2937;
+  background: rgba(2, 6, 23, 0.6);
+  color: #e5e7eb;
+  transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+}
+
+.tab:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.sidebar-footer {
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: #cbd5f5;
+}
+
+/* Main content area */
+.content {
+  flex: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+}
+
+/* Card-style sections */
+.card {
+  margin-bottom: 2rem;
+  background: #020617;
+  padding: 1.5rem 1.5rem 1.75rem;
+  border-radius: 1rem;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.4);
+  border: 1px solid #111827;
+}
+
+.card h2 {
+  margin-top: 0;
   margin-bottom: 0.5rem;
 }
 
-main {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2rem 1rem 4rem;
+.section-intro {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #9ca3af;
 }
 
-section {
-  margin-bottom: 3rem;
-  background: #020617;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-#plot {
+/* Plot containers */
+.plot {
   width: 100%;
   height: 400px;
 }
 
-.gif {
-  max-width: 100%;
-  border-radius: 0.75rem;
-  display: block;
-  margin: 1rem auto 0;
+/* Links section */
+.links-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0.5rem 0 0;
 }
 
-footer {
-  text-align: center;
-  padding: 1.5rem;
-  background: #020617;
-  border-top: 1px solid #111827;
+.links-list li {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.links-list a {
+  color: #60a5fa;
+  text-decoration: none;
+}
+
+.links-list a:hover {
+  text-decoration: underline;
+}
+
+/* Inline link under first plot */
+.inline-link {
+  margin-top: 1rem;
   font-size: 0.9rem;
+}
+
+.inline-link a {
+  color: #a855f7;
+  text-decoration: none;
+}
+
+.inline-link a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive: stack sidebar on small screens */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: static;
+    width: 100%;
+    min-height: auto;
+    border-right: none;
+    border-bottom: 1px solid #111827;
+    border-radius: 0 0 1rem 1rem;
+  }
+
+  .content {
+    padding: 1.5rem 1rem 2.5rem;
+  }
 }
