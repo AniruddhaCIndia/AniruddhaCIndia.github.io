@@ -1,9 +1,5 @@
-// ---------------------------
-// Gravitational Lensing Demo
-// ---------------------------
-
 let bins = 128;
-let extent = 5; // physical range in x and y
+let extent = 5;
 let x = [];
 let y = [];
 
@@ -14,19 +10,20 @@ let dragging = false;
 let canvas;
 
 // SIE lens parameters
-let einsteinRadius = 1.0; // b
-let q = 0.75;              // axis ratio
-let phi = 0;               // rotation angle in degrees
+let einsteinRadius = 1.0;
+let q = 0.75;
+let phi = 0;
 
 function setup() {
   canvas = createCanvas(800, 400);
   canvas.parent("lens-container");
 
-  // fill x and y
   for (let i = 0; i < bins; i++) {
     x[i] = map(i, 0, bins - 1, -extent, extent);
     y[i] = map(i, 0, bins - 1, -extent, extent);
   }
+
+  noStroke();
 }
 
 function draw() {
@@ -41,9 +38,7 @@ function draw() {
   drawSourceMarker();
 }
 
-// ===================
-// SOURCE DEFINITION
-// ===================
+// ===== SOURCE =====
 function gaussian(xv, yv, x0, y0, sigma) {
   return Math.exp(-((xv - x0) ** 2 + (yv - y0) ** 2) / (2 * sigma * sigma));
 }
@@ -59,36 +54,26 @@ function computeSource() {
   return I;
 }
 
-// ===================
-// SIE LENS POTENTIAL
-// ===================
+// ===== SIE LENS =====
 function lensDeflection(xv, yv) {
-  // Convert rotation to radians
   let phiRad = phi * Math.PI / 180;
-
-  // Rotate coordinates
   let xp = xv * Math.cos(phiRad) + yv * Math.sin(phiRad);
   let yp = -xv * Math.sin(phiRad) + yv * Math.cos(phiRad);
 
-  // Elliptical radius
   let R = Math.sqrt(q * q * xp * xp + yp * yp);
   if (R === 0) return [0, 0];
 
-  // Kormann+94 approximation
   let sqrt1mq = Math.sqrt(1 - q * q);
   let alpha_x = (einsteinRadius * q / sqrt1mq) * Math.atanh(sqrt1mq * xp / R);
   let alpha_y = (einsteinRadius * q / sqrt1mq) * Math.atan(sqrt1mq * yp / (q * R));
 
-  // Rotate back
   let ax = alpha_x * Math.cos(phiRad) - alpha_y * Math.sin(phiRad);
   let ay = alpha_x * Math.sin(phiRad) + alpha_y * Math.cos(phiRad);
 
   return [ax, ay];
 }
 
-// ===================
-// LENSED IMAGE (bilinear interpolation)
-// ===================
+// ===== LENSED IMAGE (bilinear) =====
 function computeLensed(I_source) {
   let I = [];
   for (let i = 0; i < bins; i++) {
@@ -102,11 +87,9 @@ function computeLensed(I_source) {
       let bx = xv - ax;
       let by = yv - ay;
 
-      // Map physical coords to indices
       let fx = map(bx, -extent, extent, 0, bins - 1);
       let fy = map(by, -extent, extent, 0, bins - 1);
 
-      // Bilinear interpolation
       let ix = Math.floor(fx);
       let iy = Math.floor(fy);
       let dx = fx - ix;
@@ -126,9 +109,7 @@ function computeLensed(I_source) {
   return I;
 }
 
-// ===================
-// DRAW FIELD WITH ASPECT RATIO
-// ===================
+// ===== DRAW FIELD =====
 function drawField(I, offsetX) {
   let w = width / 2;
   let h = height;
@@ -137,7 +118,6 @@ function drawField(I, offsetX) {
   let scaleY = h / (2 * extent);
   let scale = Math.min(scaleX, scaleY);
 
-  // Centering offsets
   let xOffset = offsetX + (w - 2 * extent * scale) / 2;
   let yOffset = (h - 2 * extent * scale) / 2;
 
@@ -146,23 +126,17 @@ function drawField(I, offsetX) {
       let val = I[i][j];
       let c = map(val, 0, 1, 0, 255);
 
-      noStroke();
       fill(c);
 
-      let xpos = x[j];
-      let ypos = y[i];
+      let px = xOffset + (x[j] + extent) * scale;
+      let py = h - (y[i] + extent) * scale;
 
-      let px = xOffset + (xpos + extent) * scale;
-      let py = height - (ypos + extent) * scale;
-
-      rect(px, py, scale + 1, scale + 1);
+      rect(floor(px), floor(py), ceil(scale), ceil(scale));
     }
   }
 }
 
-// ===================
-// RED DOT (SOURCE)
-// ===================
+// ===== RED DOT =====
 function drawSourceMarker() {
   let w = width / 2;
   let h = height;
@@ -172,19 +146,15 @@ function drawSourceMarker() {
   let scale = Math.min(scaleX, scaleY);
 
   let xOffset = (w - 2 * extent * scale) / 2;
-  let yOffset = (h - 2 * extent * scale) / 2;
 
   let px = xOffset + (sourceX + extent) * scale;
-  let py = height - (sourceY + extent) * scale;
+  let py = h - (sourceY + extent) * scale;
 
   fill(255, 0, 0);
-  noStroke();
-  circle(px, py, 10);
+  circle(floor(px), floor(py), 10);
 }
 
-// ===================
-// DRAGGING INTERACTION
-// ===================
+// ===== DRAGGING =====
 function mousePressed() {
   if (mouseX < width / 2) dragging = true;
 }
@@ -204,7 +174,6 @@ function mouseDragged() {
     sourceX = map(mouseX, 0, w, -extent, extent);
     sourceY = map(mouseY, h, 0, -extent, extent);
 
-    // Clamp to valid range
     sourceX = constrain(sourceX, -extent, extent);
     sourceY = constrain(sourceY, -extent, extent);
   }
