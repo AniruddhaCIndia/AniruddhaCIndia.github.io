@@ -34,8 +34,6 @@ function draw() {
 
   drawField(I_source, 0);
   drawField(I_lensed, width / 2);
-
-  drawSourceMarker();
 }
 
 // ===== SOURCE =====
@@ -119,7 +117,6 @@ function drawField(I, offsetX) {
   let scale = Math.min(scaleX, scaleY);
 
   let xOffset = offsetX + (w - 2 * extent * scale) / 2;
-  let yOffset = (h - 2 * extent * scale) / 2;
 
   for (let i = 0; i < bins; i++) {
     for (let j = 0; j < bins; j++) {
@@ -129,32 +126,14 @@ function drawField(I, offsetX) {
       fill(c);
 
       let px = xOffset + (x[j] + extent) * scale;
-      let py = h - (y[i] + extent) * scale;
+      let py = height - (y[i] + extent) * scale;
 
       rect(floor(px), floor(py), ceil(scale), ceil(scale));
     }
   }
 }
 
-// ===== RED DOT =====
-function drawSourceMarker() {
-  let w = width / 2;
-  let h = height;
-
-  let scaleX = w / (2 * extent);
-  let scaleY = h / (2 * extent);
-  let scale = Math.min(scaleX, scaleY);
-
-  let xOffset = (w - 2 * extent * scale) / 2;
-
-  let px = xOffset + (sourceX + extent) * scale;
-  let py = h - (sourceY + extent) * scale;
-
-  fill(255, 0, 0);
-  circle(floor(px), floor(py), 10);
-}
-
-// ===== DRAGGING =====
+// ===== DRAGGING / CLICK =====
 function mousePressed() {
   if (mouseX < width / 2) dragging = true;
 }
@@ -171,6 +150,7 @@ function mouseDragged() {
     let scaleY = h / (2 * extent);
     let scale = Math.min(scaleX, scaleY);
 
+    // Map mouse to source coords
     sourceX = map(mouseX, 0, w, -extent, extent);
     sourceY = map(mouseY, h, 0, -extent, extent);
 
