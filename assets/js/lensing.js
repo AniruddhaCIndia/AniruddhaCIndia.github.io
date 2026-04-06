@@ -2,7 +2,7 @@
 // Gravitational Lensing Demo
 // ---------------------------
 
-let bins = 128;
+let bins = 256;
 let extent = 5; // physical range in x and y
 let x = [];
 let y = [];
@@ -50,7 +50,7 @@ function computeSource() {
   for (let i = 0; i < bins; i++) {
     I[i] = [];
     for (let j = 0; j < bins; j++) {
-      I[i][j] = gaussian(x[j], y[i], sourceX, sourceY, 0.2);
+      I[i][j] = gaussian(x[j], y[i], sourceX, sourceY, 0.1);
     }
   }
 
