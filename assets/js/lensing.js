@@ -1,10 +1,10 @@
 let bins = 128;
-let extent = 5;
+let extent = 3;
 let x = [];
 let y = [];
 
 let sourceX = 0.0;
-let sourceY = 0.5;
+let sourceY = 0.0;
 let dragging = false;
 
 let canvas;
@@ -46,7 +46,7 @@ function computeSource() {
   for (let i = 0; i < bins; i++) {
     I[i] = [];
     for (let j = 0; j < bins; j++) {
-      I[i][j] = gaussian(x[j], y[i], sourceX, sourceY, 0.05);
+      I[i][j] = gaussian(x[j], y[i], sourceX, sourceY, 0.025);
     }
   }
   return I;
