@@ -2,7 +2,7 @@
 // Gravitational Lensing Demo
 // ---------------------------
 
-let bins = 256;
+let bins = 128;
 let extent = 5; // physical range in x and y
 let x = [];
 let y = [];
