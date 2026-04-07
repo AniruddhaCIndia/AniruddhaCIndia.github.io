@@ -150,6 +150,43 @@ body {
 
 /* Responsive: stack sidebar on small screens */
 @media (max-width: 768px) {
+
+  /* =========================
+   Video Gallery Styles
+  ========================= */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  .video-card {
+    text-align: center;
+  }
+  
+  .video-card h3 {
+    margin-bottom: 10px;
+  }
+  
+  .video-placeholder {
+    width: 100%;
+    max-width: 300px;
+    height: 180px;
+    background: #000;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  
+  .video-card video {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 8px;
+  }
   .layout {
     flex-direction: column;
   }
