@@ -1,5 +1,5 @@
 let bins = 128;
-let extent = 3;
+let extent = 5;
 let x = [];
 let y = [];
 
@@ -46,7 +46,7 @@ function computeSource() {
   for (let i = 0; i < bins; i++) {
     I[i] = [];
     for (let j = 0; j < bins; j++) {
-      I[i][j] = gaussian(x[j], y[i], sourceX, sourceY, 0.05);
+      I[i][j] = gaussian(x[j], y[i], sourceX, sourceY, 0.15);
     }
   }
   return I;
