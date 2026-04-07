@@ -33,3 +33,24 @@ Plotly.newPlot("plot2", [trace2], layout2, { responsive: true });
 
 // Footer year (shown in sidebar footer)
 document.getElementById("year").textContent = new Date().getFullYear();
+
+// =========================
+// Video Gallery JS
+// =========================
+document.addEventListener('DOMContentLoaded', () => {
+  const videoCards = document.querySelectorAll('.video-card');
+
+  videoCards.forEach(card => {
+    const placeholder = card.querySelector('.video-placeholder');
+    const video = card.querySelector('video');
+    const source = video.querySelector('source');
+
+    placeholder.addEventListener('click', () => {
+      source.src = placeholder.dataset.video;
+      video.style.display = 'block';
+      placeholder.style.display = 'none';
+      video.load();
+      video.play();
+    });
+  });
+});
