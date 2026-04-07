@@ -22,11 +22,6 @@ function setup() {
     x[i] = map(i, 0, bins - 1, -extent, extent);
     y[i] = map(i, 0, bins - 1, -extent, extent);
   }
-  
-  textAlign(CENTER, CENTER);
-  textSize(16);
-  fill(255);
-  
   pixelDensity(1);
   noStroke();
 }
@@ -37,18 +32,8 @@ function draw() {
   let I_source = computeSource();
   let I_lensed = computeLensed(I_source);
 
-  let w = (width - gap) / 2;
-
   drawField(I_source, 0);
-  drawField(I_lensed, w + gap);
-
-  // 🔤 Labels
-  fill(255);
-  noStroke();
-
-  text("Source Plane", w / 2, 20);
-  text("Lensed Image", w + gap + w / 2, 20);
-  textFont("Georgia");
+  drawField(I_lensed, width / 2);
 }
 
 // ===== SOURCE =====
