@@ -12,7 +12,7 @@ let canvas;
 // SIE lens parameters
 let einsteinRadius = 1.0;
 let q = 0.5;
-let phi = 45;
+let phi = 0;
 
 function setup() {
   canvas = createCanvas(800, 400);
@@ -46,7 +46,7 @@ function computeSource() {
   for (let i = 0; i < bins; i++) {
     I[i] = [];
     for (let j = 0; j < bins; j++) {
-      I[i][j] = gaussian(x[j], y[i], sourceX, sourceY, 0.025);
+      I[i][j] = gaussian(x[j], y[i], sourceX, sourceY, 0.05);
     }
   }
   return I;
