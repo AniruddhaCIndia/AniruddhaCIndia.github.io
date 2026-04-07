@@ -22,7 +22,7 @@ function setup() {
     x[i] = map(i, 0, bins - 1, -extent, extent);
     y[i] = map(i, 0, bins - 1, -extent, extent);
   }
-
+  pixelDensity(1);
   noStroke();
 }
 
@@ -133,24 +133,25 @@ function drawField(I, offsetX) {
   let w = width / 2;
   let h = height;
 
-  let scale = Math.min(w / (2 * extent), h / (2 * extent));
-  let xOffset = offsetX + (w - 2 * extent * scale) / 2;
+  // 🔥 Force exact pixel-to-grid mapping
+  let dx = w / bins;
+  let dy = h / bins;
 
   for (let i = 0; i < bins; i++) {
     for (let j = 0; j < bins; j++) {
+
       let val = I[i][j];
       let c = map(val, 0, 1, 0, 255);
-
       fill(c);
 
-      let px = xOffset + (x[j] + extent) * scale;
-      let py = (extent - y[i]) * scale;
+      // 🔥 Uniform tiling (no distortion)
+      let px = offsetX + j * dx;
+      let py = (bins - 1 - i) * dy; // single clean Y flip
 
-      rect(px, py, scale, scale);
+      rect(px, py, dx, dy);
     }
   }
 }
-
 // ===== DRAGGING =====
 function mousePressed() {
   if (mouseX < width / 2) dragging = true;
