@@ -56,29 +56,36 @@ function computeSource() {
 function lensDeflection(xv, yv) {
   let phiRad = phi * Math.PI / 180;
 
-  // Rotate coordinates
+  // Rotate into lens frame
   let xp = xv * Math.cos(phiRad) + yv * Math.sin(phiRad);
   let yp = -xv * Math.sin(phiRad) + yv * Math.cos(phiRad);
 
-  // Avoid singularity
-  let R = Math.sqrt(q * q * xp * xp + yp * yp);
-  if (R < 1e-6) R = 1e-6;
+  // Axis ratio safeguard
+  let q_safe = constrain(q, 0.05, 0.999);
 
-  // Avoid q = 1 instability
-  let sqrt1mq = Math.sqrt(1 - q * q);
-  if (sqrt1mq < 1e-6) sqrt1mq = 1e-6;
+  // Elliptical radius
+  let psi = Math.sqrt(q_safe * q_safe * xp * xp + yp * yp);
+  if (psi < 1e-6) psi = 1e-6;
 
-  // Clamp atanh argument
-  let arg = sqrt1mq * xp / R;
-  arg = constrain(arg, -0.999, 0.999);
+  let eps = Math.sqrt(1 - q_safe * q_safe);
 
-  let alpha_x = (einsteinRadius * q / sqrt1mq) * Math.atanh(arg);
-  let alpha_y = (einsteinRadius * q / sqrt1mq) *
-                Math.atan((sqrt1mq * yp) / (q * R));
+  let axp, ayp;
+
+  if (eps < 1e-4) {
+    // Circular limit (SIS)
+    axp = einsteinRadius * xp / psi;
+    ayp = einsteinRadius * yp / psi;
+  } else {
+    axp = (einsteinRadius / eps) *
+          Math.atan((eps * xp) / psi);
+
+    ayp = (einsteinRadius / eps) *
+          Math.atanh((eps * yp) / psi);
+  }
 
   // Rotate back
-  let ax = alpha_x * Math.cos(phiRad) - alpha_y * Math.sin(phiRad);
-  let ay = alpha_x * Math.sin(phiRad) + alpha_y * Math.cos(phiRad);
+  let ax = axp * Math.cos(phiRad) - ayp * Math.sin(phiRad);
+  let ay = axp * Math.sin(phiRad) + ayp * Math.cos(phiRad);
 
   return [ax, ay];
 }
