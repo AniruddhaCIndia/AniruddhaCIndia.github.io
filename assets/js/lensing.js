@@ -55,23 +55,35 @@ function computeSource() {
 // ===== SIE LENS =====
 function lensDeflection(xv, yv) {
   let phiRad = phi * Math.PI / 180;
+
+  // Rotate coordinates
   let xp = xv * Math.cos(phiRad) + yv * Math.sin(phiRad);
   let yp = -xv * Math.sin(phiRad) + yv * Math.cos(phiRad);
 
+  // Avoid singularity
   let R = Math.sqrt(q * q * xp * xp + yp * yp);
-  if (R === 0) return [0, 0];
+  if (R < 1e-6) R = 1e-6;
 
+  // Avoid q = 1 instability
   let sqrt1mq = Math.sqrt(1 - q * q);
-  let alpha_x = (einsteinRadius * q / sqrt1mq) * Math.atanh(sqrt1mq * xp / R);
-  let alpha_y = (einsteinRadius * q / sqrt1mq) * Math.atan(sqrt1mq * yp / (q * R));
+  if (sqrt1mq < 1e-6) sqrt1mq = 1e-6;
 
+  // Clamp atanh argument
+  let arg = sqrt1mq * xp / R;
+  arg = constrain(arg, -0.999, 0.999);
+
+  let alpha_x = (einsteinRadius * q / sqrt1mq) * Math.atanh(arg);
+  let alpha_y = (einsteinRadius * q / sqrt1mq) *
+                Math.atan((sqrt1mq * yp) / (q * R));
+
+  // Rotate back
   let ax = alpha_x * Math.cos(phiRad) - alpha_y * Math.sin(phiRad);
   let ay = alpha_x * Math.sin(phiRad) + alpha_y * Math.cos(phiRad);
 
   return [ax, ay];
 }
 
-// ===== LENSED IMAGE (bilinear) =====
+// ===== LENSED IMAGE (bilinear interpolation) =====
 function computeLensed(I_source) {
   let I = [];
   for (let i = 0; i < bins; i++) {
@@ -94,10 +106,12 @@ function computeLensed(I_source) {
       let dy = fy - iy;
 
       if (ix >= 0 && ix < bins - 1 && iy >= 0 && iy < bins - 1) {
-        let val = (1 - dx) * (1 - dy) * I_source[iy][ix] +
-                  dx * (1 - dy) * I_source[iy][ix + 1] +
-                  (1 - dx) * dy * I_source[iy + 1][ix] +
-                  dx * dy * I_source[iy + 1][ix + 1];
+        let val =
+          (1 - dx) * (1 - dy) * I_source[iy][ix] +
+          dx * (1 - dy) * I_source[iy][ix + 1] +
+          (1 - dx) * dy * I_source[iy + 1][ix] +
+          dx * dy * I_source[iy + 1][ix + 1];
+
         I[i][j] = val;
       } else {
         I[i][j] = 0;
@@ -112,10 +126,7 @@ function drawField(I, offsetX) {
   let w = width / 2;
   let h = height;
 
-  let scaleX = w / (2 * extent);
-  let scaleY = h / (2 * extent);
-  let scale = Math.min(scaleX, scaleY);
-
+  let scale = Math.min(w / (2 * extent), h / (2 * extent));
   let xOffset = offsetX + (w - 2 * extent * scale) / 2;
 
   for (let i = 0; i < bins; i++) {
@@ -126,14 +137,14 @@ function drawField(I, offsetX) {
       fill(c);
 
       let px = xOffset + (x[j] + extent) * scale;
-      let py = height - (y[i] + extent) * scale;
+      let py = (extent - y[i]) * scale;
 
-      rect(floor(px), floor(py), ceil(scale), ceil(scale));
+      rect(px, py, scale, scale);
     }
   }
 }
 
-// ===== DRAGGING / CLICK =====
+// ===== DRAGGING =====
 function mousePressed() {
   if (mouseX < width / 2) dragging = true;
 }
@@ -146,13 +157,9 @@ function mouseDragged() {
   if (dragging) {
     let w = width / 2;
     let h = height;
-    let scaleX = w / (2 * extent);
-    let scaleY = h / (2 * extent);
-    let scale = Math.min(scaleX, scaleY);
 
-    // Map mouse to source coords
     sourceX = map(mouseX, 0, w, -extent, extent);
-    sourceY = map(mouseY, h, 0, -extent, extent);
+    sourceY = map(mouseY, 0, h, extent, -extent);
 
     sourceX = constrain(sourceX, -extent, extent);
     sourceY = constrain(sourceY, -extent, extent);
