@@ -37,6 +37,42 @@ document.getElementById("year").textContent = new Date().getFullYear();
 // =========================
 // Video Gallery JS
 // =========================
+
+function toggleAudio(button, audioId) {
+  const audios = document.querySelectorAll("audio");
+  const buttons = document.querySelectorAll(".play-btn");
+
+  // Stop all other audios
+  audios.forEach(audio => {
+    if (audio.id !== audioId) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  });
+
+  // Reset other buttons
+  buttons.forEach(btn => {
+    if (btn !== button) {
+      btn.classList.remove("active");
+      btn.textContent = "Play";
+    }
+  });
+
+  const audio = document.getElementById(audioId);
+
+  // Toggle current audio
+  if (audio.paused) {
+    audio.play();
+    button.textContent = "Stop";
+    button.classList.add("active");
+  } else {
+    audio.pause();
+    audio.currentTime = 0;
+    button.textContent = "Play";
+    button.classList.remove("active");
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const videoCards = document.querySelectorAll('.video-card');
 
