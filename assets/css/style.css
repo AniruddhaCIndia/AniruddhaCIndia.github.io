@@ -185,6 +185,41 @@ body {
   border-radius: 8px;
 }
 
+.audio-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border: 1px solid #ccc;
+  margin-top: 20px;
+}
+
+.audio-cell {
+  border: 1px solid #ccc;
+  padding: 20px;
+  text-align: center;
+}
+
+.audio-title {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.play-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.play-btn:hover {
+  background: #1d4ed8;
+}
+
+.play-btn.active {
+  background: #dc2626;
+}
+
 /* Responsive: stack sidebar on small screens */
 @media (max-width: 768px) {
 
