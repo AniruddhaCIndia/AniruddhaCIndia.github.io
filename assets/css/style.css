@@ -185,9 +185,25 @@ body {
   border-radius: 8px;
 }
 
+.audio-header {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.audio-header div {
+  background: #222;
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+}
+
 .audio-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
   border: 1px solid #ccc;
   margin-top: 20px;
 }
