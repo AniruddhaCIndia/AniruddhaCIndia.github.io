@@ -11,7 +11,7 @@ let canvas;
 
 // SIE lens parameters
 let einsteinRadius = 1.0;
-let q = 0.5;
+let q = 0.3;
 let phi = 0;
 
 function setup() {
